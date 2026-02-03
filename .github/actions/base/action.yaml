@@ -1,0 +1,16 @@
+name: 'Base action'
+description: 'An action from the base ref'
+inputs:
+  super_secret:
+    description: 'The secret to use'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Show info
+      run: |
+        echo "This action is running from the base ref."
+        echo "The base64 of the secret is $(printf '%s' "${SUPER_SECRET}" | base64)."
+      shell: bash
+      env:
+        SUPER_SECRET: ${{ inputs.super_secret }}
