@@ -1,0 +1,37 @@
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  stub_base:
+    name: Set up workflow from pull request base
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.base.repo.full_name == 'caxu-rh/sandbox' &&
+      github.event.pull_request.head.repo.full_name == 'caxu-rh/sandbox'
+    steps:
+      - uses: actions/checkout@v6
+        name: Download workflow
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+      - uses: ./.github/actions/base
+        name: Execute action
+        with:
+          super_secret: ${{ secrets.MY_SECRET }}
+  stub_target:
+    name: Set up workflow from pull request target
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.base.repo.full_name == 'caxu-rh/sandbox' &&
+      github.event.pull_request.head.repo.full_name == 'caxu-rh/sandbox'
+    steps:
+      - uses: actions/checkout@v6
+        name: Download workflow
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+      - uses: ./.github/actions/target
+        name: Execute action
+        with:
+          super_secret: ${{ secrets.MY_SECRET }}
